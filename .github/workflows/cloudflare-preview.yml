@@ -1,0 +1,92 @@
+name: Cloudflare Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-pages-voyage-travel-h5-cloud-preview
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    if: github.repository == 'rachelzhao1202-blip/voyage-travel' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: cloudflare-preview
+    steps:
+      - name: Check out selected main revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Install and build
+        shell: bash
+        run: |
+          npm install --global --ignore-scripts --no-audit --no-fund pnpm@11.25.0
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm build
+
+      - name: Validate public static output
+        shell: bash
+        run: |
+          output=dist/client
+          test -d "$output"
+          test ! -L dist
+          test ! -L "$output"
+          for page in index.html flights.html contract.html stay-guide.html; do
+            test -s "$output/$page"
+          done
+
+          found="$(find "$output" \( -type l \
+            -o -iname 'national-day-hotel-deals-xianyu.png' \
+            -o -iname 'wechat-contact-card.png' \
+            -o -iname 'wechat-hotel-deals-v2.png' \
+            -o -iname '.env*' \
+            -o -iname '.dev.vars*' \
+            -o -iname '_worker.js' \) -print -quit)"
+          if [[ -n "$found" || -e functions || -L functions ]]; then
+            echo '::error::Refusing to upload: unexpected asset, link, or server code.'
+            exit 1
+          fi
+
+      - name: Deploy only to the Cloudflare preview branch
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: |
+          if [[ ! -v CLOUDFLARE_API_TOKEN || -z "$CLOUDFLARE_API_TOKEN" || ! "${CLOUDFLARE_ACCOUNT_ID:-}" =~ ^[[:xdigit:]]{32}$ ]]; then
+            echo '::error::Set CLOUDFLARE_API_TOKEN and a valid CLOUDFLARE_ACCOUNT_ID in cloudflare-preview.'
+            exit 1
+          fi
+
+          project=voyage-travel-h5
+          preview_branch=cloud-preview
+          expected_production_branch=main
+          production_branch="$(
+            curl --silent --show-error --fail --max-time 30 \
+              --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$project" |
+              jq -er --arg project "$project" \
+                '. | select(.success == true and .result.name == $project) | .result.production_branch | select(type == "string" and length > 0)'
+          )"
+          if [[ "$production_branch" != "$expected_production_branch" || "$production_branch" == "$preview_branch" ]]; then
+            echo '::error::Cloudflare production branch is unexpected; nothing was uploaded.'
+            exit 1
+          fi
+
+          pnpm exec wrangler pages deploy dist/client \
+            --project-name "$project" \
+            --branch "$preview_branch" \
+            --commit-hash "$GITHUB_SHA" \
+            --commit-dirty=false
