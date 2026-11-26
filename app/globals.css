@@ -137,3 +137,70 @@ footer p { margin:9px 0 0; color:var(--muted); font-size:10px; }
 }
 
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+
+/* Homepage: destination discovery */
+.discovery-home { --forest:#173d33; --forest-deep:#112f27; --champagne:#eccc93; --subtle:#526259; --discovery-card:#fffdf7; max-width:1040px; }
+.discovery-home .topbar { border-color:#e0ded3; }
+.discovery-hero { position:relative; isolation:isolate; overflow:hidden; margin:16px 16px 0; padding:28px 22px 73px; border-radius:23px; background:linear-gradient(112deg,var(--forest-deep),var(--forest)); color:#fff9ec; }
+.discovery-hero::after { position:absolute; z-index:-1; content:""; width:390px; height:390px; right:-180px; top:-140px; border-radius:50%; opacity:.62; background:repeating-radial-gradient(circle at center,transparent 0 23px,#688577 24px 25px,transparent 26px 40px); mask-image:linear-gradient(to left,#000,transparent); }
+.discovery-hero > p:first-child { margin:0 0 18px; color:var(--champagne); font-weight:700; font-size:10px; letter-spacing:.19em; }
+.discovery-hero h1 { margin:0; font:500 clamp(36px,7vw,65px)/1.11 Georgia,"Songti SC",serif; letter-spacing:-.055em; }
+.hero-caption { margin:13px 0 0; font-size:14px; color:#dce9df; }
+.hero-meta { display:inline-block; margin-top:19px; padding:5px 9px; border:1px solid #71887a; border-radius:99px; font-size:10px; color:#f4f8e5; }
+.discovery-search { z-index:1; position:relative; margin:-49px 26px 18px; padding:13px; border-radius:17px; border:1px solid #e7e4d8; background:var(--discovery-card); box-shadow:0 6px 22px #2e46301a; }
+.discovery-search-form { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:9px; align-items:end; }
+.discovery-search-form label { display:block; min-width:0; color:var(--forest); font-weight:700; font-size:12px; }
+.discovery-search-form label small { font-weight:400; color:var(--subtle); }
+.discovery-search-form input { border:1px solid #d6dfd5; background:#f6f8f3; border-radius:9px; padding:0 9px; margin:5px 0 0; width:100%; min-width:0; min-height:44px; color:#17382f; font:400 16px system-ui,sans-serif; }
+.discovery-search-form input::placeholder { color:#5f6c62; font-size:13px; }
+.discovery-search-form input[type=date] { appearance:none; display:block; }
+.discovery-search-submit { grid-column:1/-1; min-height:44px; background:var(--forest); color:#fff; border:0; border-radius:9px; font-size:15px; font-weight:700; }
+.discovery-destinations { margin-top:10px; display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
+.discovery-destinations span { margin-right:2px; color:var(--subtle); font-size:11px; }
+.discovery-destinations button { min-height:34px; padding:0 9px; border:1px solid #dbe2d6; background:#f7f9f3; border-radius:99px; color:var(--forest); font-size:12px; }
+.discovery-destinations button[aria-pressed=true] { background:#e1ede3; border-color:#748d7e; font-weight:700; }
+.discovery-home .site-tabs { margin-bottom:11px; border-radius:10px; overflow:hidden; }
+.discovery-home .site-tabs a[aria-current=page],.discovery-home .city-scroll button.active { background:var(--forest); }
+.discovery-result-strip { margin:14px 16px 0; padding:11px 12px; background:#e6ede1; color:var(--forest); border-radius:10px; display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:12px; overflow-wrap:anywhere; }
+.discovery-result-strip > div:last-child { display:flex; flex-wrap:wrap; align-items:center; justify-content:end; column-gap:7px; }
+.discovery-result-strip small { display:block; margin-top:3px; color:var(--subtle); font-size:11px; }
+.discovery-result-strip a,.discovery-result-strip button { display:inline-flex; align-items:center; min-height:44px; background:transparent; border:0; color:var(--forest); text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
+.discovery-section-title { display:flex; align-items:end; justify-content:space-between; gap:12px; margin:23px 1px 13px; color:var(--forest-deep); }
+.discovery-section-title span,.card-eyebrow { display:block; color:#5c7163; font-size:10px; font-weight:700; letter-spacing:.13em; }
+.discovery-section-title h2 { margin:5px 0 0; font:600 23px/1.18 Georgia,"Songti SC",serif; }
+.discovery-section-title p { flex:none; margin:0; color:var(--subtle); font-size:12px; }
+.search-hint { margin:-2px 0 12px; color:var(--subtle); font-size:12px; line-height:1.6; }
+.discovery-home .rate-item,.search-contract-card { margin:0 0 12px; border:1px solid #e2e2d7; background:var(--discovery-card); border-radius:15px; padding:14px; }
+.discovery-home .rate-info h2 { white-space:normal; overflow-wrap:anywhere; color:var(--forest-deep); font-size:22px; }
+.discovery-home .rate-info p,.discovery-home .rate-option small { font-size:11px; }
+.discovery-home .rate-option strong { font-size:12px; }
+.discovery-home .rate-option b { color:var(--forest); text-align:right; font-size:20px; }
+.discovery-home .rate-option b small { display:block; font-size:9px; line-height:1.35; }
+.discovery-home .rate-item > img,.discovery-home .hotel-cover { border-radius:9px; }
+.discovery-home .rate-actions,.discovery-card-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.discovery-home .rate-actions button,.discovery-card-actions button { min-height:42px; padding:0 15px; border:1px solid var(--forest); border-radius:8px; background:var(--forest); color:white; font-size:13px; }
+.discovery-home .rate-actions a,.discovery-card-actions a { display:inline-flex; align-items:center; min-height:42px; padding:0 12px; border:1px solid #b9cbbb; border-radius:8px; text-decoration:none; color:var(--forest); font-size:13px; }
+.discovery-empty { border:1px dashed #c5ccbf; padding:19px; border-radius:11px; color:var(--subtle); font-size:14px; }
+.search-contract { scroll-margin-top:72px; margin:0 16px 35px; padding-top:1px; border-top:1px solid #d5dace; }
+.search-contract-grid { display:grid; gap:10px; align-items:start; }
+.search-contract-card { margin:0; min-width:0; }
+.search-contract-card h3 { margin:6px 0 8px; color:var(--forest-deep); font:600 17px/1.25 Georgia,"Songti SC",serif; }
+.search-contract-rate { display:flex; align-items:baseline; justify-content:space-between; gap:8px; padding:7px 0; border-top:1px solid #e8e6dc; color:#47584e; font-size:12px; line-height:1.45; }
+.search-contract-rate b { flex:none; color:var(--forest); text-align:right; }
+.search-contract-rate small { display:block; font-weight:400; color:var(--subtle); font-size:10px; }
+.discovery-more { display:block; margin:12px 0 0; width:100%; border:1px solid #bac9bb; border-radius:9px; background:#edf3e9; color:var(--forest); min-height:44px; font-size:13px; }
+.contract-platform-link { display:inline-flex; align-items:center; min-height:40px; color:#1c503d; font-size:12px; text-underline-offset:3px; }
+.discovery-home :is(button,input,a):focus-visible { outline:2px solid #376f5a; outline-offset:2px; }
+@media(max-width:410px) {
+  .discovery-home .rate-item:not(.text-only) { grid-template-columns:1fr; }
+  .discovery-home .rate-item > img,.discovery-home .rate-item > .hotel-cover { width:100%; height:132px; }
+}
+@media(min-width:650px) {
+  .discovery-hero { margin:23px 24px 0; padding:36px 34px 80px; }
+  .discovery-search { margin:-51px 44px 20px; padding:17px; }
+  .discovery-search-form { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 100px; gap:12px; }
+  .discovery-search-submit { grid-column:auto; }
+  .search-contract-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .discovery-result-strip,.search-contract { margin-left:24px; margin-right:24px; }
+  .discovery-home .rate-item,.search-contract-card { padding:18px 20px; }
+}

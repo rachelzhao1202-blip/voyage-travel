@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { hotelOffers, isHotelOfferCurrent, formatAvailableHotelDates, type HotelOffer } from '../data/hotels';
 import { offerRegions, hotelRegion } from '../data/offer-regions';
 import SiteTabs from '../components/site-tabs';
+import ContractSearchResults, { filterCityHotels } from '../components/contract-search-results';
+import { ctripHotelLink } from '../data/hotel-links';
+import { formatHotelPrice, hasConfirmedStayNight, isSearchDate, matchesHotelSearch } from '../data/hotel-search';
 
 const cnDate = (date: string) => {
   const [, month, day] = date.split('-');
@@ -11,7 +14,7 @@ const cnDate = (date: string) => {
 };
 
 const displayPrice = (value: string) => value.trim().toUpperCase();
-const hotelPrice = (value: string) => value.trim() ? `¥${displayPrice(value)}` : '价格请询';
+const hotelPrice = formatHotelPrice;
 
 const hotelDateText = (offer: HotelOffer) => {
   if (offer.availableDates?.length) return `${formatAvailableHotelDates(offer.availableDates, chinaToday())}入住${offer.availableDates.length > 1 ? ' · 可按晚拆订' : ''}`;
@@ -47,6 +50,7 @@ const consolidateHotelOffers = (offers: HotelOffer[]) => {
       id: `group-${sorted[0].id}`,
       checkIn: undefined,
       checkOut: undefined,
+      availableDates: undefined,
       dateLabel: `${rateOptions.length} 个价格方案`,
       expiresOn: expiries.sort().at(-1),
       room: '全部价格已合并展示',
@@ -64,9 +68,6 @@ const consolidateHotelOffers = (offers: HotelOffer[]) => {
     };
   });
 };
-
-const xhsUrl = (name: string) =>
-  `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(name)}`;
 
 const chinaToday = () => {
   const chinaTime = new Date(Date.now() + 8 * 60 * 60 * 1000);
@@ -137,38 +138,78 @@ export default function Home() {
   const [notice, setNotice] = useState('');
   const [today, setToday] = useState('');
   const [region, setRegion] = useState<(typeof offerRegions)[number]>('全部');
+  const [filters, setFilters] = useState({ query: '', date: '' });
+  const [queryDraft, setQueryDraft] = useState('');
+  const [dateDraft, setDateDraft] = useState('');
+  const [contractLimit, setContractLimit] = useState(10);
 
   useEffect(() => {
     const refreshDate = () => setToday(chinaToday());
     refreshDate();
-    const selectedRegion = new URLSearchParams(window.location.search).get('region');
-    let regionTimer: number | undefined;
-    if (offerRegions.some((value) => value === selectedRegion)) {
-      regionTimer = window.setTimeout(() => setRegion(selectedRegion as (typeof offerRegions)[number]), 0);
-    }
+    const readFilters = () => {
+      const params = new URLSearchParams(window.location.search);
+      const regionParam = params.get('region');
+      const query = (params.get('q') || '').trim().slice(0, 60);
+      const value = params.get('date') || '';
+      const date = isSearchDate(value) && value >= chinaToday() ? value : '';
+      setRegion(offerRegions.find(item => item === regionParam) || '全部');
+      setFilters({ query, date });
+      setQueryDraft(query);
+      setDateDraft(date);
+      setContractLimit(10);
+    };
+    readFilters();
+    window.addEventListener('popstate', readFilters);
     const timer = window.setInterval(refreshDate, 60 * 1000);
     return () => {
       window.clearInterval(timer);
-      window.clearTimeout(regionTimer);
+      window.removeEventListener('popstate', readFilters);
     };
   }, []);
 
-  const available = consolidateHotelOffers(hotelOffers.filter((offer) =>
-    Boolean(offer.checkIn || offer.homepage) && isHotelOfferCurrent(offer, today)
-  ));
-  const featuredOffers = available.sort((a, b) =>
-    Number(Boolean(b.featured || b.highlight)) - Number(Boolean(a.featured || a.highlight))
-  );
-  const visibleOffers = featuredOffers.filter((offer) =>
-    region === '全部' || hotelRegion(offer.city, offer.region) === region
-  );
+  const active = hotelOffers.filter(offer => Boolean(offer.checkIn || offer.homepage) && isHotelOfferCurrent(offer, today));
+  const totalHotels = new Set(active.map(offer => offer.hotel)).size;
+  const isSearching = Boolean(filters.query || filters.date || region !== '全部');
+  const visibleOffers = consolidateHotelOffers(active.filter(offer => {
+    const area = hotelRegion(offer.city, offer.region);
+    return (region === '全部' || region === area)
+      && matchesHotelSearch(filters.query, offer.city, area, offer.hotel, offer.englishName, offer.cityEnglish)
+      && (!filters.date || (filters.date >= today && hasConfirmedStayNight(offer, filters.date)));
+  })).sort((a, b) => Number(Boolean(b.featured || b.highlight)) - Number(Boolean(a.featured || a.highlight)));
+  const contractResults = isSearching ? filterCityHotels(filters.query, region, today, filters.date) : [];
+  const searchSummary = [filters.query, filters.date && `${cnDate(filters.date)}入住`, region !== '全部' && region].filter(Boolean).join(' · ');
 
-  function chooseRegion(value: (typeof offerRegions)[number]) {
-    setRegion(value);
+  function updateSearch(query: string, date: string, area: (typeof offerRegions)[number]) {
+    setFilters({ query, date });
+    setRegion(area);
+    setContractLimit(10);
     const url = new URL(window.location.href);
-    if (value === '全部') url.searchParams.delete('region');
-    else url.searchParams.set('region', value);
+    if (query) url.searchParams.set('q', query); else url.searchParams.delete('q');
+    if (date) url.searchParams.set('date', date); else url.searchParams.delete('date');
+    if (area !== '全部') url.searchParams.set('region', area); else url.searchParams.delete('region');
     window.history.replaceState({}, '', url);
+  }
+
+  function submitSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const date = dateDraft && isSearchDate(dateDraft) && dateDraft >= chinaToday() ? dateDraft : '';
+    updateSearch(queryDraft.trim(), date, region);
+  }
+
+  function selectDestination(query: string) {
+    setQueryDraft(query);
+    updateSearch(query, dateDraft, '全部');
+  }
+
+  function resetSearch() {
+    setQueryDraft('');
+    setDateDraft('');
+    updateSearch('', '', '全部');
+  }
+
+  async function consultContract(title: string, text: string) {
+    setNotice(await shareInquiry(title, text));
+    window.setTimeout(() => setNotice(''), 2600);
   }
 
   async function consult(offer: HotelOffer) {
@@ -182,7 +223,7 @@ export default function Home() {
   }
 
   return (
-    <main>
+    <main className="discovery-home">
       <header className="topbar">
         <a className="brand" href="#top">VOYAGE <span>TRAVEL</span></a>
         <div className="top-actions">
@@ -191,29 +232,49 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="intro" id="top">
-        <p>PRIVATE HOTEL RATES</p>
-        <h1>近期酒店<br />精选特价</h1>
-        <div className="intro-note">
-          <span>{featuredOffers.length} 家酒店</span>
-          <span>无需登录 · 人工确认</span>
-        </div>
+      <section className="discovery-hero" id="top">
+        <p>VOYAGE TRAVEL / HOTEL COLLECTION</p>
+        <h1>下一站，住哪里？</h1>
+        <p className="hero-caption">限时特价、城市协议价，一起找。</p>
+        <span className="hero-meta">{totalHotels} 家近期特价酒店 · 无需登录</span>
       </section>
-      <SiteTabs active="offers" />
 
-      <nav className="filter-panel offer-region-filter" aria-label="按地区查看特价">
+      <div className="discovery-search">
+        <form className="discovery-search-form" role="search" aria-label="搜索酒店特价和协议价" onSubmit={submitSearch}>
+          <label htmlFor="stay-destination">目的地 / 酒店
+            <input type="search" id="stay-destination" placeholder="例如：广州、香港、白云万豪" maxLength={60} value={queryDraft} onChange={e => setQueryDraft(e.target.value)} />
+          </label>
+          <label htmlFor="stay-date">入住日期 <small>选填</small>
+            <input type="date" id="stay-date" min={today || undefined} value={dateDraft} onChange={e => setDateDraft(e.target.value)} />
+          </label>
+          <button className="discovery-search-submit" type="submit">搜索</button>
+        </form>
+        <nav className="discovery-destinations" aria-label="热门目的地">
+          <span>热门目的地</span>
+          {['广州', '香港', '深圳', '澳门', '杭州', '上海'].map(city => (
+            <button type="button" key={city} aria-pressed={filters.query === city && region === '全部'} onClick={() => selectDestination(city)}>{city}</button>
+          ))}
+        </nav>
+      </div>
+      <SiteTabs active="offers" />
+      <nav className="filter-panel offer-region-filter" aria-label="按地区查看酒店">
         <div className="city-scroll">
           {offerRegions.map((value) => (
             <button key={value} className={region === value ? 'active' : ''}
-              aria-pressed={region === value} onClick={() => chooseRegion(value)}>
+              aria-pressed={region === value} onClick={() => updateSearch(filters.query, filters.date, value)}>
               {value}
             </button>
           ))}
         </div>
       </nav>
+      {isSearching && <div className="discovery-result-strip" role="status">
+        <div><strong>{searchSummary}</strong><small>{visibleOffers.length} 家特价 · {contractResults.length} 家协议价或房券</small></div>
+        <div>{contractResults.length > 0 && <a href="#found-contract">看协议价 ↓</a>}<button type="button" onClick={resetSearch}>清除筛选</button></div>
+      </div>}
 
       <section className="rate-list" aria-live="polite">
-        <div className="list-head"><span>{region === '全部' ? '酒店特价' : `${region}酒店特价`}</span><span>{visibleOffers.length} 家酒店</span></div>
+        <div className="discovery-section-title"><div><span>01 / LIMITED OFFERS</span><h2>近期酒店特价</h2></div><p>{visibleOffers.length} 家</p></div>
+        {filters.date && <p className="search-hint">只显示明确涵盖所选入住日的特价。未注明具体入住日的房源，可清除日期后查看。</p>}
         {visibleOffers.length ? visibleOffers.map((offer, index) => (
           <article className={`rate-item ${offer.rateOptions ? 'has-options' : ''} ${!offer.image ? 'text-only' : ''}`} key={offer.id}>
             {offer.image && (offer.imageViewport ? (
@@ -259,16 +320,17 @@ export default function Home() {
                 <div className="rate-price"><strong>{hotelPrice(offer.price)}</strong><span>{offer.price ? offer.priceUnit || '/ 晚' : ''}{offer.referencePrice ? ` · 平台参考 ¥${displayPrice(offer.referencePrice)}` : ' · 询价确认'}</span></div>
               )}
               <div className="rate-actions">
-                <a href={xhsUrl(offer.hotel)} target="_blank" rel="noreferrer">小红书看看 ↗</a>
                 <button onClick={() => consult(offer)}>询价</button>
+                {ctripHotelLink(offer.hotel) && <a href={ctripHotelLink(offer.hotel)} target="_blank" rel="noopener noreferrer" aria-label={`在携程查看${offer.hotel}价格（新窗口）`}>携程看价 ↗</a>}
               </div>
             </div>
           </article>
         )) : (
-          <div className="empty"><p>{region === '全部' ? '近期暂无主页特价' : '该地区暂无酒店特价'}</p></div>
+          <div className="discovery-empty">{isSearching ? '没有匹配的特价。试试其他日期，或查看下面的协议价。' : '近期暂无首页特价。'}</div>
         )}
       </section>
 
+      {isSearching && <ContractSearchResults results={contractResults} limit={contractLimit} showMore={() => setContractLimit(contractLimit + 10)} date={filters.date} inquire={consultContract} />}
       <footer>
         <span>VOYAGE TRAVEL</span>
         <p>价格与房态以人工最终确认为准</p>

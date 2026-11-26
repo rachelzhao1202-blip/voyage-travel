@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { cityContractRates, type ContractHotel } from '../../data/contract-rates';
 import SiteTabs from '../../components/site-tabs';
+import { ctripHotelLink } from '../../data/hotel-links';
 
 const cityNames = cityContractRates.map((item) => item.city);
 
@@ -153,6 +154,7 @@ export default function ContractRatesPage() {
                   </strong>}
                 </div>
               ))}
+              {ctripHotelLink(hotel.name) && <a className="contract-platform-link" href={ctripHotelLink(hotel.name)} target="_blank" rel="noopener noreferrer" aria-label={`在携程查看${hotel.name}价格（新窗口）`}>携程看价 ↗</a>}
             </div>
             <button className="contract-consult" onClick={() => consult(hotel)}>询价</button>
           </article>

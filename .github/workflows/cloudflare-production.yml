@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - data/hotels.ts
+      - data/hotel-search.ts
+      - data/hotel-links.ts
+      - app/**
+      - components/**
       - .github/workflows/cloudflare-production.yml
 
 permissions:
