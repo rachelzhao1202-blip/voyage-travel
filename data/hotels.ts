@@ -63,6 +63,597 @@ export function formatAvailableHotelDates(dates: string[], today: string): strin
 // 有截止日的项目会在日期过后自动从首页隐藏。
 export const hotelOffers: HotelOffer[] = [
   {
+    "id": "gz-baiyun-nov27-bf-2026",
+    "hotel": "广州白云万豪酒店",
+    "englishName": "GUANGZHOU MARRIOTT HOTEL BAIYUN",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27"
+    ],
+    "expiresOn": "2026-11-27",
+    "room": "大床房或双床房",
+    "breakfast": "双早",
+    "price": "700",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-baiyun-nov27-king-backup-2026",
+    "hotel": "广州白云万豪酒店",
+    "englishName": "GUANGZHOU MARRIOTT HOTEL BAIYUN",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27"
+    ],
+    "expiresOn": "2026-11-27",
+    "room": "大床房 · 备选",
+    "breakfast": "双早",
+    "price": "800",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-baiyun-nov28-ro-2026",
+    "hotel": "广州白云万豪酒店",
+    "englishName": "GUANGZHOU MARRIOTT HOTEL BAIYUN",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "大床房或双床房",
+    "breakfast": "无早",
+    "price": "668",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-baiyun-dec03-05-2026",
+    "hotel": "广州白云万豪酒店",
+    "englishName": "GUANGZHOU MARRIOTT HOTEL BAIYUN",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-03",
+      "2026-12-04",
+      "2026-12-05"
+    ],
+    "expiresOn": "2026-12-05",
+    "room": "房型请询",
+    "price": "700",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-baiyun-dec31-2026",
+    "hotel": "广州白云万豪酒店",
+    "englishName": "GUANGZHOU MARRIOTT HOTEL BAIYUN",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-31"
+    ],
+    "expiresOn": "2026-12-31",
+    "room": "房型请询",
+    "breakfast": "双早",
+    "price": "788",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-ritz-nov27-tower-king-2026",
+    "hotel": "广州丽思卡尔顿酒店",
+    "englishName": "THE RITZ-CARLTON GUANGZHOU",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27"
+    ],
+    "expiresOn": "2026-11-27",
+    "room": "行政塔景大床房 · 含酒廊",
+    "price": "2848",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-ritz-nov27-tower-suite-2026",
+    "hotel": "广州丽思卡尔顿酒店",
+    "englishName": "THE RITZ-CARLTON GUANGZHOU",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27"
+    ],
+    "expiresOn": "2026-11-27",
+    "room": "行政塔景套房 · 含酒廊",
+    "price": "2958",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-ritz-dec03-tower-suite-2026",
+    "hotel": "广州丽思卡尔顿酒店",
+    "englishName": "THE RITZ-CARLTON GUANGZHOU",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-03"
+    ],
+    "expiresOn": "2026-12-03",
+    "room": "行政塔景套房 · 含酒廊",
+    "price": "2958",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-ritz-dec03-city-suite-2026",
+    "hotel": "广州丽思卡尔顿酒店",
+    "englishName": "THE RITZ-CARLTON GUANGZHOU",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-03"
+    ],
+    "expiresOn": "2026-12-03",
+    "room": "行政城景套房 · 含酒廊",
+    "price": "2848",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-ritz-dec03-tower-room-2026",
+    "hotel": "广州丽思卡尔顿酒店",
+    "englishName": "THE RITZ-CARLTON GUANGZHOU",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-03"
+    ],
+    "expiresOn": "2026-12-03",
+    "room": "行政塔景房 · 含酒廊",
+    "price": "2848",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-ritz-dec31-tower-king-2026",
+    "hotel": "广州丽思卡尔顿酒店",
+    "englishName": "THE RITZ-CARLTON GUANGZHOU",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-31"
+    ],
+    "expiresOn": "2026-12-31",
+    "room": "塔景大床房",
+    "breakfast": "无早",
+    "price": "3398",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-indigo-dec03-balcony-king-2026",
+    "hotel": "广州海心沙英迪格酒店",
+    "englishName": "HOTEL INDIGO GUANGZHOU HAIXINSHA",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-03"
+    ],
+    "expiresOn": "2026-12-03",
+    "room": "阳台大床房",
+    "price": "1328",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-indigo-dec03-1br-2026",
+    "hotel": "广州海心沙英迪格酒店",
+    "englishName": "HOTEL INDIGO GUANGZHOU HAIXINSHA",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-03"
+    ],
+    "expiresOn": "2026-12-03",
+    "room": "单卧房型",
+    "price": "1528",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-indigo-dec03-river-suite-2026",
+    "hotel": "广州海心沙英迪格酒店",
+    "englishName": "HOTEL INDIGO GUANGZHOU HAIXINSHA",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-03"
+    ],
+    "expiresOn": "2026-12-03",
+    "room": "江景套房",
+    "price": "1598",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-indigo-dec26-balcony-king-2026",
+    "hotel": "广州海心沙英迪格酒店",
+    "englishName": "HOTEL INDIGO GUANGZHOU HAIXINSHA",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-26"
+    ],
+    "expiresOn": "2026-12-26",
+    "room": "阳台大床房",
+    "price": "1328",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-indigo-dec31-a-2026",
+    "hotel": "广州海心沙英迪格酒店",
+    "englishName": "HOTEL INDIGO GUANGZHOU HAIXINSHA",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-31"
+    ],
+    "expiresOn": "2026-12-31",
+    "room": "房型请询",
+    "price": "2078",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-indigo-dec31-b-2026",
+    "hotel": "广州海心沙英迪格酒店",
+    "englishName": "HOTEL INDIGO GUANGZHOU HAIXINSHA",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-31"
+    ],
+    "expiresOn": "2026-12-31",
+    "room": "房型请询",
+    "price": "2298",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "gz-indigo-dec31-c-2026",
+    "hotel": "广州海心沙英迪格酒店",
+    "englishName": "HOTEL INDIGO GUANGZHOU HAIXINSHA",
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-12-31"
+    ],
+    "expiresOn": "2026-12-31",
+    "room": "房型请询",
+    "price": "2628",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kimpton-202611-ocean-flex",
+    "hotel": "香港尖沙咀金普顿酒店",
+    "englishName": "KIMPTON TSIM SHA TSUI HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-26",
+      "2026-11-27",
+      "2026-11-28",
+      "2026-11-29"
+    ],
+    "expiresOn": "2026-11-29",
+    "room": "海景房",
+    "price": "3080",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kimpton-202611-ocean-bf",
+    "hotel": "香港尖沙咀金普顿酒店",
+    "englishName": "KIMPTON TSIM SHA TSUI HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-26"
+    ],
+    "expiresOn": "2026-11-26",
+    "room": "海景房",
+    "breakfast": "双早",
+    "price": "2750",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kimpton-202611-premier-king",
+    "hotel": "香港尖沙咀金普顿酒店",
+    "englishName": "KIMPTON TSIM SHA TSUI HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27"
+    ],
+    "expiresOn": "2026-11-27",
+    "room": "尊享海景大床房",
+    "breakfast": "双早",
+    "price": "3520",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kimpton-202611-premier-twin",
+    "hotel": "香港尖沙咀金普顿酒店",
+    "englishName": "KIMPTON TSIM SHA TSUI HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27"
+    ],
+    "expiresOn": "2026-11-27",
+    "room": "尊享海景双床房",
+    "breakfast": "双早",
+    "price": "3740",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kimpton-202611-ocean-ro",
+    "hotel": "香港尖沙咀金普顿酒店",
+    "englishName": "KIMPTON TSIM SHA TSUI HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "海景房",
+    "breakfast": "无早",
+    "price": "3300",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kimpton-202611-premier-bf",
+    "hotel": "香港尖沙咀金普顿酒店",
+    "englishName": "KIMPTON TSIM SHA TSUI HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "尊享海景房",
+    "breakfast": "双早",
+    "price": "3850",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-regent-202611-harbour",
+    "hotel": "香港丽晶酒店",
+    "englishName": "REGENT HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-26",
+      "2026-11-27"
+    ],
+    "expiresOn": "2026-11-27",
+    "room": "维港景观房",
+    "price": "6050",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-skycity-202611-nov28",
+    "hotel": "香港天际万豪酒店",
+    "englishName": "HONG KONG SKYCITY MARRIOTT HOTEL",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "房型请询",
+    "price": "2750",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-skycity-202611-nov29",
+    "hotel": "香港天际万豪酒店",
+    "englishName": "HONG KONG SKYCITY MARRIOTT HOTEL",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-29"
+    ],
+    "expiresOn": "2026-11-29",
+    "room": "房型请询",
+    "price": "2198.90",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kerry-202611-deluxe-king",
+    "hotel": "香港嘉里酒店",
+    "englishName": "KERRY HOTEL, HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27",
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "超豪华大床房",
+    "breakfast": "双早",
+    "price": "2860",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kerry-202611-harbour",
+    "hotel": "香港嘉里酒店",
+    "englishName": "KERRY HOTEL, HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27",
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "海景房",
+    "breakfast": "双早",
+    "price": "3080",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-kerry-202611-deluxe-twin",
+    "hotel": "香港嘉里酒店",
+    "englishName": "KERRY HOTEL, HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27",
+      "2026-11-28",
+      "2026-11-29",
+      "2026-11-30"
+    ],
+    "expiresOn": "2026-11-30",
+    "room": "超豪华双床房",
+    "breakfast": "双早",
+    "price": "3080",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-grand-202611-deluxe-twin",
+    "hotel": "香港君悦酒店",
+    "englishName": "GRAND HYATT HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27",
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "豪华双床房",
+    "breakfast": "双早",
+    "price": "2860",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-grand-202611-club-king",
+    "hotel": "香港君悦酒店",
+    "englishName": "GRAND HYATT HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27",
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "嘉宾轩大床房",
+    "breakfast": "双早",
+    "price": "3410",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "hk-w-202611-ocean",
+    "hotel": "香港 W 酒店",
+    "englishName": "W HONG KONG",
+    "city": "香港",
+    "cityEnglish": "HONG KONG",
+    "region": "粤港澳",
+    "homepage": true,
+    "availableDates": [
+      "2026-11-27",
+      "2026-11-28"
+    ],
+    "expiresOn": "2026-11-28",
+    "room": "海景房",
+    "breakfast": "双早",
+    "price": "3080",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
     id: 'guangzhou-conrad-deluxe-20261207',
     hotel: '广州康莱德酒店',
     englishName: 'CONRAD GUANGZHOU',
@@ -307,3 +898,4 @@ export const hotelOffers: HotelOffer[] = [
     status: "available",
   },
 ];
+
