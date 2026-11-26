@@ -14,7 +14,7 @@ const displayPrice = (value: string) => value.trim().toUpperCase();
 const hotelPrice = (value: string) => value.trim() ? `¥${displayPrice(value)}` : '价格请询';
 
 const hotelDateText = (offer: HotelOffer) => {
-  if (offer.availableDates?.length) return formatAvailableHotelDates(offer.availableDates, chinaToday());
+  if (offer.availableDates?.length) return `${formatAvailableHotelDates(offer.availableDates, chinaToday())}入住${offer.availableDates.length > 1 ? ' · 可按晚拆订' : ''}`;
   if (offer.dateLabel) return offer.dateLabel;
   if (offer.checkIn && offer.checkOut) return `${cnDate(offer.checkIn)} — ${cnDate(offer.checkOut)}`;
   return '日期请询';
@@ -278,3 +278,4 @@ export default function Home() {
     </main>
   );
 }
+
