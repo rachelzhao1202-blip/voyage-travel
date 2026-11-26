@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { hotelOffers, isHotelOfferCurrent, formatAvailableHotelDates, type HotelOffer } from '../data/hotels';
 import { offerRegions, hotelRegion } from '../data/offer-regions';
 import SiteTabs from '../components/site-tabs';
@@ -140,7 +140,7 @@ export default function Home() {
   const [region, setRegion] = useState<(typeof offerRegions)[number]>('全部');
   const [filters, setFilters] = useState({ query: '', date: '' });
   const [queryDraft, setQueryDraft] = useState('');
-  const [dateDraft, setDateDraft] = useState('');
+  const dateInput = useRef<HTMLInputElement>(null);
   const [contractLimit, setContractLimit] = useState(10);
 
   useEffect(() => {
@@ -155,7 +155,7 @@ export default function Home() {
       setRegion(offerRegions.find(item => item === regionParam) || '全部');
       setFilters({ query, date });
       setQueryDraft(query);
-      setDateDraft(date);
+      if (dateInput.current) dateInput.current.value = date;
       setContractLimit(10);
     };
     readFilters();
@@ -192,18 +192,21 @@ export default function Home() {
 
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const date = dateDraft && isSearchDate(dateDraft) && dateDraft >= chinaToday() ? dateDraft : '';
-    updateSearch(queryDraft.trim(), date, region);
+    const fields = new FormData(event.currentTarget);
+    const value = String(fields.get('date') || '');
+    const date = isSearchDate(value) && value >= chinaToday() ? value : '';
+    updateSearch(String(fields.get('q') || '').trim(), date, region);
   }
 
   function selectDestination(query: string) {
     setQueryDraft(query);
-    updateSearch(query, dateDraft, '全部');
+    const value = dateInput.current?.value || '';
+    updateSearch(query, isSearchDate(value) && value >= chinaToday() ? value : '', '全部');
   }
 
   function resetSearch() {
     setQueryDraft('');
-    setDateDraft('');
+    if (dateInput.current) dateInput.current.value = '';
     updateSearch('', '', '全部');
   }
 
@@ -242,10 +245,10 @@ export default function Home() {
       <div className="discovery-search">
         <form className="discovery-search-form" role="search" aria-label="搜索酒店特价和协议价" onSubmit={submitSearch}>
           <label htmlFor="stay-destination">目的地 / 酒店
-            <input type="search" id="stay-destination" placeholder="例如：广州、香港、白云万豪" maxLength={60} value={queryDraft} onChange={e => setQueryDraft(e.target.value)} />
+            <input type="search" id="stay-destination" name="q" placeholder="例如：广州、香港、白云万豪" maxLength={60} value={queryDraft} onChange={e => setQueryDraft(e.target.value)} />
           </label>
           <label htmlFor="stay-date">入住日期 <small>选填</small>
-            <input type="date" id="stay-date" min={today || undefined} value={dateDraft} onChange={e => setDateDraft(e.target.value)} />
+            <input type="date" id="stay-date" name="date" ref={dateInput} min={today || undefined} />
           </label>
           <button className="discovery-search-submit" type="submit">搜索</button>
         </form>
