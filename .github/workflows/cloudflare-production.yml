@@ -1,0 +1,105 @@
+name: Voyage Travel Production
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - data/hotels.ts
+      - .github/workflows/cloudflare-production.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: voyage-travel-production
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository == 'rachelzhao1202-blip/voyage-travel' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Build and inspect publishable static files
+        shell: bash
+        run: |
+          npm install --global --ignore-scripts --no-audit --no-fund pnpm@11.25.0
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm build
+          output=dist/client
+          test -d "$output" && test ! -L dist && test ! -L "$output"
+          for page in index.html flights.html contract.html stay-guide.html; do
+            test -s "$output/$page"
+          done
+          test ! -e functions && test ! -L functions
+          test -z "$(find "$output" -type l -print -quit)"
+          find "$output" -type f \( -iname 'contact-qr.png' -o -iname 'wechat-contact-card.png' -o -iname 'wechat-hotel-deals-v2.png' -o -iname 'national-day-hotel-deals-xianyu.png' \) -delete
+          test -z "$(find "$output" \( -iname '*.csv' -o -iname 'internal-*' -o -iname '.env*' -o -iname '.dev.vars*' -o -iname '_worker.js' -o -iname 'functions' \) -print -quit)"
+          mkdir -p artifact
+          tar -C "$output" -cf artifact/site.tar .
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: voyage-public-site
+          path: artifact/site.tar
+          if-no-files-found: error
+          retention-days: 2
+
+  publish:
+    if: github.repository == 'rachelzhao1202-blip/voyage-travel' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment:
+      name: cloudflare-production
+      url: https://voyage-travel-h5.pages.dev/
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: voyage-public-site
+          path: artifact
+      - name: Unpack clean static build and install deployment command
+        run: |
+          mkdir site
+          tar --extract --file=artifact/site.tar --directory=site --no-same-owner --no-same-permissions
+          npm install --global --ignore-scripts --no-audit --no-fund wrangler@4.92.0
+      - name: Publish to the existing Pages production branch only
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: |
+          if [[ -z "${CLOUDFLARE_API_TOKEN:-}" || ! "${CLOUDFLARE_ACCOUNT_ID:-}" =~ ^[[:xdigit:]]{32}$ ]]; then
+            echo '::error::Configure the dedicated cloudflare-production environment before deployment.'
+            exit 1
+          fi
+          project=voyage-travel-h5
+          curl -fsS --max-time 30 \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$project" |
+            jq -e '.success == true and .result.name == "voyage-travel-h5" and .result.production_branch == "main" and .result.subdomain == "voyage-travel-h5.pages.dev"' >/dev/null
+          wrangler pages deploy site --project-name "$project" --branch main --commit-hash "$GITHUB_SHA"
+      - name: Verify the homepage on its permanent URL
+        shell: bash
+        run: |
+          for i in {1..10}; do
+            if curl -fsSL --max-time 12 -H 'Cache-Control: no-cache' \
+              "https://voyage-travel-h5.pages.dev/?verify=$GITHUB_SHA-$i" -o live.html && cmp -s site/index.html live.html; then
+              echo 'Production homepage matches this build.'
+              exit 0
+            fi
+            sleep 10
+          done
+          echo '::error::Upload returned but the production homepage was not verified.'
+          exit 1
