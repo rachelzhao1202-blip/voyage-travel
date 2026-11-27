@@ -63,6 +63,39 @@ export function formatAvailableHotelDates(dates: string[], today: string): strin
 // 有截止日的项目会在日期过后自动从首页隐藏。
 export const hotelOffers: HotelOffer[] = [
   {
+    "id": "beijing-hotel-jen-nov27-2026",
+    "hotel": "北京新国贸饭店",
+    "englishName": "JEN BEIJING BY SHANGRI-LA",
+    "city": "北京",
+    "cityEnglish": "BEIJING",
+    "region": "国内其他",
+    "homepage": true,
+    "checkIn": "2026-11-27",
+    "checkOut": "2026-11-28",
+    "dateLabel": "11月27日入住",
+    "room": "超豪华大床房 · 朝央视景观",
+    "breakfast": "无早",
+    "price": "950",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
+    "id": "sanya-yalong-pullman-villa-dec30-2026",
+    "hotel": "三亚亚龙湾铂尔曼别墅度假酒店",
+    "englishName": "PULLMAN SANYA YALONG BAY VILLAS & RESORT",
+    "city": "三亚",
+    "cityEnglish": "SANYA",
+    "region": "国内其他",
+    "homepage": true,
+    "dateLabel": "有效期至12月30日 · 须提前预约，房态请询",
+    "expiresOn": "2026-12-30",
+    "room": "南洋泳池别墅 · 客名入住",
+    "breakfast": "双早",
+    "price": "950",
+    "priceUnit": "人民币 / 晚",
+    "status": "available"
+  },
+  {
     "id": "sz-qianhai-lemeridien-nov27-2026",
     "hotel": "深圳前海华侨城艾美酒店",
     "englishName": "LE MÉRIDIEN SHENZHEN, QIANHAI",
