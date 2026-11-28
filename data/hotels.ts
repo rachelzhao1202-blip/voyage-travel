@@ -63,6 +63,40 @@ export function formatAvailableHotelDates(dates: string[], today: string): strin
 // 有截止日的项目会在日期过后自动从首页隐藏。
 export const hotelOffers: HotelOffer[] = [
   {
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "priceUnit": "人民币 / 晚",
+    "status": "available",
+    "id": "gz-tianhe-hilton-king-nov28-2026",
+    "hotel": "广州天河希尔顿酒店",
+    "englishName": "HILTON GUANGZHOU TIANHE",
+    "checkIn": "2026-11-28",
+    "checkOut": "2026-11-29",
+    "dateLabel": "11月28日入住",
+    "room": "大床房",
+    "breakfast": "双早",
+    "price": "1000"
+  },
+  {
+    "city": "广州",
+    "cityEnglish": "GUANGZHOU",
+    "region": "粤港澳",
+    "homepage": true,
+    "priceUnit": "人民币 / 晚",
+    "status": "available",
+    "id": "gz-four-seasons-river-nov29-2026",
+    "hotel": "广州四季酒店",
+    "englishName": "FOUR SEASONS HOTEL GUANGZHOU",
+    "checkIn": "2026-11-29",
+    "checkOut": "2026-11-30",
+    "dateLabel": "11月29日入住",
+    "room": "豪华江景客房 · 床型请询",
+    "breakfast": "无早",
+    "price": "2078"
+  },
+  {
     "id": "sz-qianhai-st-regis-bay-nov28-2026",
     "hotel": "深圳前海华侨城瑞吉酒店",
     "englishName": "THE ST. REGIS SHENZHEN BAO’AN",
